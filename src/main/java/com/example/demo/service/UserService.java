@@ -50,19 +50,19 @@ public class UserService {
     }
 
     public void createUser(UserDto userDto) {
-        if (repo.findByEmail(userDto.getEmail()) != null) {
-            throw new UserNotFoundException("User with email " + userDto.getEmail() + " already exists");
-        }
-
-        User user = User.builder()
-                .name(userDto.getName())
-                .age(userDto.getAge())
-                .salary(userDto.getSalary())
-                .email(userDto.getEmail())
-                .password(passwordEncoder.encode(userDto.getPassword()))
-                .role(Role.valueOf("ROLE_USER"))
-                .build();
-        repo.save(user);
+        Optional<User> gmail =repo.findByEmail(userDto.getEmail());
+         
+         if(!gmail.isPresent()) {
+        	 User user = User.builder()
+                     .name(userDto.getName())
+                     .age(userDto.getAge())
+                     .salary(userDto.getSalary())
+                     .email(userDto.getEmail())
+                     .password(passwordEncoder.encode(userDto.getPassword()))
+                     .role(Role.valueOf("ROLE_USER"))
+                     .build();
+             repo.save(user);
+         }
     }
 
     public LoginResponse login(LoginDto loginDto) {
