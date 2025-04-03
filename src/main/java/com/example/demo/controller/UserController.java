@@ -40,8 +40,11 @@ public class UserController {
 
     @PostMapping("/createUser")
     public ResponseEntity<String> createUser(@RequestBody UserDto userDto) {
-        userService.createUser(userDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
+        boolean result =   userService.createUser(userDto);
+        if(result)
+             return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
+        else
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User is already present");
     }
 
     @PostMapping("/login")
