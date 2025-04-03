@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.example.demo.dto.GetResponseDto;
 import com.example.demo.dto.LoginDto;
 import com.example.demo.dto.LoginResponse;
@@ -16,7 +19,8 @@ import com.example.demo.dto.UserDto;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserService;
 
-@RestController
+@CrossOrigin(origins = {"http://localhost:5173", "https://online-sho.netlify.app"}, allowCredentials = "true")
+@RestController 
 public class UserController {
 
     @Autowired
