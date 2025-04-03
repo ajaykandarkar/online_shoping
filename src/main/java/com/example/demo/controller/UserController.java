@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.demo.dto.GetResponseDto;
 import com.example.demo.dto.LoginDto;
 import com.example.demo.dto.LoginResponse;
 import com.example.demo.dto.UpddateSalaryResponse;
@@ -27,8 +28,8 @@ public class UserController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<User>> getAll() {
-        List<User> users = userService.getAll();
+    public ResponseEntity<List<GetResponseDto>> getAll() {
+        List<GetResponseDto> users = userService.getAll();
         return ResponseEntity.ok(users);
     }
 
