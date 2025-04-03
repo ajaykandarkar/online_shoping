@@ -50,7 +50,7 @@ public class UserService {
         repo.save(user);
     }
 
-    public void createUser(UserDto userDto) {
+    public boolean createUser(UserDto userDto) {
         Optional<User> gmail =repo.findByEmail(userDto.getEmail());
          
          if(!gmail.isPresent()) {
@@ -63,7 +63,10 @@ public class UserService {
                      .role(Role.valueOf("ROLE_USER"))
                      .build();
              repo.save(user);
+             return true;
          }
+        else{
+            return false;
     }
 
     public LoginResponse login(LoginDto loginDto) {
