@@ -54,24 +54,34 @@ public class SecurityConfig {
 	 }
 	 
 	 @Bean
-	    CorsConfigurationSource corsConfigurationSource() {
-	        CorsConfiguration configuration = new CorsConfiguration();
-	        configuration.setAllowedOrigins(List.of("http://localhost:5173",
-	        		                                "https://online-sho.netlify.app"));                   
-	        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); 
-	        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));           
-	        configuration.setAllowCredentials(true);                                             
-	        configuration.setExposedHeaders(List.of("Authorization"));                          
-
-	        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-	        source.registerCorsConfiguration("/**", configuration);
-	        return source;
-	    }
+	 SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+			  httpSecurity
+	          .cors(cors -> cors.configurationSource(corsConfigurationSource()))   
+	          .csrf(csrf -> csrf.disable()) 										
+	          .authorizeHttpRequests(authorize ->
+	                  authorize.requestMatchers("/login",
+	                		  	    "/createUser",
+	                		  	    "/api/user", 
+	                		  	    "/api/user/login",
+	                		  	    "/api/user/hello",
+	                		  	    "/swagger-ui/**",
+	                		  	    "/v3/api-docs/**",
+	                		  	    "/api/forgotPassword/**")
+	                          .permitAll()
+	                          .anyRequest()
+				  .authenticated()
+	          )
+	          .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+	          .authenticationProvider(authenticationProvider())
+	          .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+		  return httpSecurity.build();
+	 }
 	 
 	 @Bean
 	 CorsConfigurationSource corsConfigurationSource() {
 	        CorsConfiguration configuration = new CorsConfiguration();
-	        configuration.setAllowedOrigins(List.of("http://localhost:5173"));                   
+	        configuration.setAllowedOrigins(List.of("http://localhost:5173",
+                    "https://online-sho.netlify.app"));                   
 	        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); 
 	        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));           
 	        configuration.setAllowCredentials(true);                                             
