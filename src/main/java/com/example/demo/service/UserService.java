@@ -39,8 +39,18 @@ public class UserService {
         return "Hello";
     }
 
-    public List<User> getAll() {
-        return repo.findAll();
+    public List<GetResponseDto> getAll() {
+        return repo.findAll().stream().map(this::convertToGetResponseDto).collect(Collectors.toList());
+    }
+    
+    public GetResponseDto convertToGetResponseDto(User user) {
+    	GetResponseDto dto = GetResponseDto.builder()
+    			.name(user.getName())
+    			.age(user.getAge())
+    			.salary(user.getSalary())
+    			.email(user.getEmail())
+    			.build();
+    	return dto;
     }
 
     public void updateSalary(double salary, int id) {
